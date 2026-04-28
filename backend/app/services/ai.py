@@ -1,7 +1,7 @@
 import httpx
 from app.core.config import settings
 
-OLLAMA_BASE_URL = "http://localhost:11434"
+OLLAMA_BASE_URL = settings.OLLAMA_BASE_URL
 OLLAMA_MODEL = "gemma3:4b"
 
 MISTRAL_API_URL = "https://api.mistral.ai/v1/chat/completions"

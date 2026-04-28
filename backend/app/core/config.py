@@ -6,6 +6,7 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
     
+    OLLAMA_BASE_URL: str = "http://localhost:11434"
     MISTRAL_API_KEY: str = ""
     CHROMA_PERSIST_DIR: str = "./chroma_data"
     
