@@ -36,7 +36,7 @@ export default function Login() {
         transition={{ duration: 0.4 }}
       >
         <div className="auth-logo">
-          <h1>CompanionAI</h1>
+          <h1>LiliLand</h1>
           <p>Your caring AI friend</p>
         </div>
 
