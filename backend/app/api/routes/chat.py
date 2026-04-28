@@ -5,7 +5,7 @@ import json
 from app.models.chat import ChatRequest, ChatResponse, ChatHistoryResponse, Message
 from app.core.database import get_db, User, Conversation
 from app.core.security import get_current_user
-from app.services.ai import get_ai_response, detect_tone
+from app.services.ai import get_ai_response
 from app.services.memory import store_memory, retrieve_memories
 
 router = APIRouter(prefix="/chat", tags=["chat"])
@@ -46,7 +46,8 @@ async def send_message(request: ChatRequest, user_id: str = Depends(get_current_
     # Get AI response
     ai_reply = await get_ai_response(
         user_message=request.message,
-        conversation_history=history
+        conversation_history=history,
+        tone=request.tone
     )
     
     timestamp = datetime.utcnow()

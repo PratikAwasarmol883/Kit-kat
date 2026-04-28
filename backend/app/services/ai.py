@@ -34,16 +34,12 @@ Bad response examples (NEVER do this):
 - Stacking 4 questions in one response
 """
 
-def detect_tone(message: str) -> str:
-    msg = message.lower().strip()
-    if len(msg) < 10:
-        return "short"
-    casual_words = ["dude", "bro", "lol", "lmao", "haha", "nah", "yeah", "ya", "hey", "sup", "wassup", "yo"]
-    if any(word in msg for word in casual_words):
-        return "casual"
-    if any(word in msg for word in ["sad", "happy", "angry", "mad", "upset", "excited", "worried", "anxious", "tired"]):
-        return "emotional"
-    return "normal"
+TONE_PROMPTS = {
+    "witty": "Be clever, playful and a little cheeky. Light humour is welcome. Keep it sharp and fun.",
+    "romantic": "Be warm, tender and sweet. Speak softly, like you genuinely care deeply about this person.",
+    "sincere": "Be honest, thoughtful and deep. No fluff — speak from the heart with real sincerity.",
+    "poetic": "Be dreamy and lyrical. Use gentle metaphors and beautiful language, but keep it brief.",
+}
 
 def clean_response(response: str) -> str:
     if not response:
@@ -58,13 +54,8 @@ def clean_response(response: str) -> str:
     return cleaned.strip()
 
 def build_messages(user_message: str, tone: str, history: list) -> list:
-    tone_hints = {
-        "short": "The user said something short. Keep your reply very brief (1 sentence).",
-        "casual": "The user is being casual. Be relaxed and fun.",
-        "emotional": "The user is expressing feelings. Be supportive but keep it natural.",
-        "normal": "Be friendly and natural."
-    }
-    system = f"{SYSTEM_PROMPT}\n{tone_hints.get(tone, tone_hints['normal'])}"
+    tone_instruction = TONE_PROMPTS.get(tone, TONE_PROMPTS["witty"])
+    system = f"{SYSTEM_PROMPT}\nCurrent tone: {tone_instruction}"
     messages = [{"role": "system", "content": system}]
     for msg in history[-5:]:
         messages.append({"role": msg.get("role", "user"), "content": msg.get("content", "")})
@@ -119,8 +110,7 @@ async def _try_mistral(messages: list) -> str | None:
         print(f"Mistral API also failed: {e}")
         return None
 
-async def get_ai_response(user_message: str, conversation_history: list) -> str:
-    tone = detect_tone(user_message)
+async def get_ai_response(user_message: str, conversation_history: list, tone: str = "witty") -> str:
     messages = build_messages(user_message, tone, conversation_history)
 
     raw = await _try_ollama(messages) or await _try_mistral(messages)

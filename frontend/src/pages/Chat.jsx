@@ -14,12 +14,6 @@ const TONES = [
   { id: 'poetic', icon: '📖', label: 'Poetic & Dreamy' },
 ];
 
-const MEMORIES = [
-  { category: 'Preference', text: 'Loves Earl Grey with a hint of lavender', time: 'Shared on Oct 12' },
-  { category: 'Interest', text: 'Fascinated by vintage poetry and classical music', time: 'Shared on Oct 10' },
-  { category: 'Life Event', text: 'Recently started a new chapter in their career', time: 'Shared on Oct 8' },
-];
-
 export default function Chat() {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -124,29 +118,6 @@ export default function Chat() {
                 <span>{tone.label}</span>
               </motion.div>
             ))}
-          </div>
-        </div>
-
-        <div className="section">
-          <div className="section-label" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            Correspondence
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '16px' }}
-            >
-              +
-            </motion.button>
-          </div>
-        </div>
-
-        <div className="conversation-list">
-          <div className="conv-item active">
-            <div className="conv-icon">🕐</div>
-            <div>
-              <div className="conv-title">Our First Day</div>
-              <div className="conv-preview">Hello! It's so nice to meet you...</div>
-            </div>
           </div>
         </div>
 
