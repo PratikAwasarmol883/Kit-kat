@@ -6,6 +6,7 @@ import ChatBubble from '../components/ChatBubble';
 import ChatInput from '../components/ChatInput';
 import LoadingDots from '../components/LoadingDots';
 import { chatAPI } from '../services/api';
+import princessImg from '../assets/princess.svg';
 
 const TONES = [
   { id: 'witty',    icon: '✨', label: 'Witty & Charming' },
@@ -119,7 +120,9 @@ export default function Chat() {
       {/* LEFT SIDEBAR */}
       <aside style={{ width: '260px', flexShrink: 0, height: '100vh', background: 'var(--warm-white)', borderRight: '1px solid var(--border)', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <div className="sidebar-header">
-          <div className="logo-icon">❀</div>
+          <div className="logo-icon" style={{ background: 'none', padding: 0, overflow: 'hidden' }}>
+            <img src={princessImg} alt="princess" style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '50%' }} />
+          </div>
           <h1>LiliLand</h1>
         </div>
 
