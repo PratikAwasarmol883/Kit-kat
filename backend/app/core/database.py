@@ -42,6 +42,13 @@ class Memory(Base):
 
 Base.metadata.create_all(bind=engine)
 
+# Auto-migrate: add missing columns to existing tables
+with engine.connect() as conn:
+    existing = [row[1] for row in conn.execute(__import__('sqlalchemy').text("PRAGMA table_info(conversations)"))]
+    if "title" not in existing:
+        conn.execute(__import__('sqlalchemy').text("ALTER TABLE conversations ADD COLUMN title VARCHAR DEFAULT 'New Conversation'"))
+        conn.commit()
+
 def get_db():
     db = SessionLocal()
     try:

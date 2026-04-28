@@ -14,12 +14,6 @@ const TONES = [
   { id: 'poetic', icon: '📖', label: 'Poetic & Dreamy' },
 ];
 
-const MEMORIES = [
-  { category: 'Preference', text: 'Loves Earl Grey with a hint of lavender', time: 'Shared on Oct 12' },
-  { category: 'Interest', text: 'Fascinated by vintage poetry and classical music', time: 'Shared on Oct 10' },
-  { category: 'Life Event', text: 'Recently started a new chapter in their career', time: 'Shared on Oct 8' },
-];
-
 export default function Chat() {
   const [messages, setMessages] = useState([]);
   const [conversations, setConversations] = useState([]);
@@ -228,47 +222,6 @@ export default function Chat() {
         <ChatInput onSend={handleSend} disabled={isTyping} warmth={warmth} onWarmthChange={setWarmth} />
       </div>
 
-      {/* RIGHT SIDEBAR */}
-      <aside style={{ width: '280px', flexShrink: 0, height: '100vh', background: 'var(--warm-white)', borderLeft: '1px solid var(--border)', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-        <div className="memories-header">
-          <h3>Memories <span className="beta-badge">Beta</span></h3>
-          <p>Details I hold dear to my heart.</p>
-        </div>
-
-        {MEMORIES.map((mem, idx) => (
-          <div className="memory-card" key={idx}>
-            <div className="memory-category">{mem.category}</div>
-            <div className="memory-text">"{mem.text}"</div>
-            <div className="memory-time">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="12" cy="12" r="10"/>
-                <polyline points="12 6 12 12 16 14"/>
-              </svg>
-              {mem.time}
-            </div>
-          </div>
-        ))}
-
-        <button className="pin-memory-btn">+ Pin a New Memory</button>
-
-        <div className="connection-settings">
-          <div className="connection-toggle">
-            <h4>Connection Settings</h4>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <polyline points="6 9 12 15 18 9"/>
-            </svg>
-          </div>
-          <div className="setting-row">
-            <span className="setting-label">Active Listening</span>
-            <span className="setting-badge">On</span>
-          </div>
-          <div className="setting-row">
-            <span className="setting-label">Memory Retention</span>
-            <span className="setting-badge">Indefinite</span>
-          </div>
-          <a href="#" className="download-link">Download Journal Export</a>
-        </div>
-      </aside>
     </div>
   );
 }
