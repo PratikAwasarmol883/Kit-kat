@@ -133,6 +133,20 @@ export default function Chat() {
     );
   };
 
+  const handleDeleteConversation = async (e, convId) => {
+    e.stopPropagation();
+    try {
+      await chatAPI.deleteConversation(convId);
+      setConversations((prev) => prev.filter((c) => c.id !== convId));
+      if (activeConvId === convId) {
+        setActiveConvId(null);
+        setMessages([]);
+      }
+    } catch (err) {
+      setError('Failed to delete conversation.');
+    }
+  };
+
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
@@ -209,13 +223,27 @@ export default function Chat() {
               className={`conv-item ${activeConvId === conv.id ? 'active' : ''}`}
               onClick={() => selectConversation(conv.id)}
               whileHover={{ x: 3 }}
-              style={{ cursor: 'pointer' }}
+              style={{ cursor: 'pointer', position: 'relative' }}
             >
               <div className="conv-icon">💬</div>
-              <div style={{ overflow: 'hidden' }}>
+              <div style={{ overflow: 'hidden', flex: 1 }}>
                 <div className="conv-title" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{conv.title}</div>
                 <div className="conv-preview" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{conv.preview}</div>
               </div>
+              <button
+                onClick={(e) => handleDeleteConversation(e, conv.id)}
+                title="Delete conversation"
+                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px', opacity: 0.4, flexShrink: 0, lineHeight: 1, borderRadius: '4px', color: 'var(--text-secondary)' }}
+                onMouseEnter={(e) => e.currentTarget.style.opacity = 1}
+                onMouseLeave={(e) => e.currentTarget.style.opacity = 0.4}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <polyline points="3 6 5 6 21 6" />
+                  <path d="M19 6l-1 14H6L5 6" />
+                  <path d="M10 11v6M14 11v6" />
+                  <path d="M9 6V4h6v2" />
+                </svg>
+              </button>
             </motion.div>
           ))}
           {conversations.length === 0 && (

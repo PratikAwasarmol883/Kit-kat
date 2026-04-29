@@ -176,3 +176,12 @@ async def clear_chat(conversation_id: int, user_id: str = Depends(get_current_us
     conv.updated_at = datetime.utcnow()
     db.commit()
     return {"message": "Chat cleared"}
+
+
+@router.delete("/conversation")
+async def delete_conversation(conversation_id: int, user_id: str = Depends(get_current_user), db: Session = Depends(get_db)):
+    conv = get_conversation(conversation_id, user_id, db)
+    db.query(ChatMessage).filter(ChatMessage.conversation_id == conversation_id).delete()
+    db.delete(conv)
+    db.commit()
+    return {"message": "Conversation deleted"}

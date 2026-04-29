@@ -43,6 +43,9 @@ export const chatAPI = {
 
   clearChat: (conversation_id) =>
     api.delete(`/chat/clear?conversation_id=${conversation_id}`),
+
+  deleteConversation: (conversation_id) =>
+    api.delete(`/chat/conversation?conversation_id=${conversation_id}`),
 };
 
 export const streamMessage = async (message, tone, warmth, conversationId, onToken, onDone, onError) => {
