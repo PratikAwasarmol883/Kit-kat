@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
 from sqlalchemy.orm import Session
 from datetime import datetime
 import json
@@ -57,7 +57,7 @@ async def list_conversations(user_id: str = Depends(get_current_user), db: Sessi
     return result
 
 @router.post("/send", response_model=ChatResponse)
-async def send_message(request: ChatRequest, user_id: str = Depends(get_current_user), db: Session = Depends(get_db)):
+async def send_message(request: ChatRequest, background_tasks: BackgroundTasks, user_id: str = Depends(get_current_user), db: Session = Depends(get_db)):
     if request.conversation_id:
         conv = get_conversation(request.conversation_id, user_id, db)
     else:
@@ -92,7 +92,7 @@ async def send_message(request: ChatRequest, user_id: str = Depends(get_current_
     db.commit()
 
     if len(request.message) > 20:
-        store_memory(user_id, f"User mentioned: {request.message[:100]}")
+        background_tasks.add_task(store_memory, user_id, f"User mentioned: {request.message[:100]}")
 
     return ChatResponse(reply=ai_reply, timestamp=timestamp, conversation_id=conv.id)
 

@@ -1,15 +1,19 @@
 import chromadb
+import httpx
 from app.core.config import settings
-import ollama
 from datetime import datetime
 
 chroma_client = chromadb.PersistentClient(path=settings.CHROMA_PERSIST_DIR)
 
 def get_embedding(text: str) -> list:
     try:
-        response = ollama.embeddings(model="nomic-embed-text", prompt=text)
-        return response["embedding"]
-    except:
+        response = httpx.post(
+            f"{settings.OLLAMA_BASE_URL}/api/embeddings",
+            json={"model": "nomic-embed-text", "prompt": text},
+            timeout=3.0
+        )
+        return response.json()["embedding"]
+    except Exception:
         return [0] * 768
 
 def get_collection(user_id: str):
