@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     OLLAMA_BASE_URL: str = "http://localhost:11434"
     MISTRAL_API_KEY: str = ""
     CHROMA_PERSIST_DIR: str = "./chroma_data"
+    CORS_ORIGINS: str = "http://localhost:5173,http://localhost:3000"
     
     class Config:
         env_file = ".env"
