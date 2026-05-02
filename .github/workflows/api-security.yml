@@ -1,0 +1,54 @@
+name: API Security Scan
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  security-events: write
+  contents: read
+  pull-requests: write
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      # TODO: Replace with your actual deployment URL
+      - name: Fetch OpenAPI spec from deployment
+        run: |
+          curl -fsSL https://kit-kat-backend.onrender.com/openapi.json \
+            -o openapi-live.json
+          test -s openapi-live.json
+          echo "Spec fetched ($(wc -c < openapi-live.json) bytes)"
+
+      - name: Run Secoraa API Security Scan
+        id: scan
+        uses: Secoraa/Secoraa-platform@main
+        # TODO: Replace with your actual deployment URL
+        with:
+          target-url: https://kit-kat-backend.onrender.com
+          openapi-spec: ./openapi-live.json
+          severity-threshold: HIGH
+          fail-on-findings: 'true'
+          pr-comment: 'true'
+          secoraa-url: https://secoraa-backend.onrender.com
+          secoraa-api-key: ${{ secrets.SECORAA_API_KEY }}
+
+      - name: Upload SARIF to GitHub Security tab
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: secoraa-results.sarif
+
+      - name: Save scan results as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: secoraa-results
+          path: secoraa-results.sarif
+          retention-days: 30
