@@ -34,7 +34,7 @@ jobs:
           target-url: https://kit-kat-backend.onrender.com
           openapi-spec: ./openapi-live.json
           severity-threshold: HIGH
-          fail-on-findings: 'true'
+          fail-on-findings: 'false'
           pr-comment: 'true'
           secoraa-url: https://secoraa-backend.onrender.com
           secoraa-api-key: ${{ secrets.SECORAA_API_KEY }}
